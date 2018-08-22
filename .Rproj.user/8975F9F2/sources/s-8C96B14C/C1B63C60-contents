@@ -1,0 +1,247 @@
+#-------------------------------------------------------------------------------------------------------
+# Chapter 7 - Git
+
+
+# You've got so many files by now.
+# Raw data, exploratory scripts, Rmd and HTML files.
+# Git is useful for version control, especially when working with teams on big projects. And GitHub is useful because it's built on top of Git and lets the public download your files for free.
+# Git started out as version control system and has since been "repurposed" beyond software development
+# Journalists use it for methodology, but also to share raw and summarized data.
+# - see for example: https://github.com/BuzzFeedNews/everything 
+
+pkgs <- c('reshape2','geojson','readxl','ggplot2',
+          'leaflet','httr','rgeolocate','shiny','sp','dplyr')
+
+install.packages("geojson")
+install.packages("rgeolocate")
+install.packages("widyr")
+install.packages("igraph")
+install.packages("slickR")
+install.packages("ggraph")
+install.packages("geojsonio")
+
+check <- sapply(pkgs,require,warn.conflicts = TRUE,character.only = TRUE)
+
+if(any(!check)){
+  pkgs.missing <- pkgs[!check]
+  install.packages(pkgs.missing)
+  check <- sapply(pkgs.missing,require,warn.conflicts = TRUE,character.only = TRUE)
+}
+
+shiny::runGitHub('yonicd/gunflow')
+
+# Pretty neat - http://127.0.0.1:3996/ - interactive web app out of the box ...
+
+
+#-------------------------------------------------------------------------------------------------------
+# Show me more!
+# https://flowingdata.com/2008/08/29/a-case-for-open-source-data-visualization/
+# https://www.washingtonpost.com/national/how-trump-is-changing-the-face-of-legal-immigration/2018/07/02/477c78b2-65da-11e8-99d2-0d678ec08c2f_story.html?noredirect=on&utm_term=.58ac2642a12e
+# https://github.com/wpinvestigative/immigrant_visas
+# https://peerj.com/preprints/3159/
+
+
+#-------------------------------------------------------------------------------------------------------
+# lets get setup for this project ...
+install.packages("usethis")
+
+usethis::use_course("https://github.com/r-journalism/learn-chapter-7/archive/master.zip")
+
+
+#-------------------------------------------------------------------------------------------------------
+# Git basics
+git --version
+git config --global user.email "edgar.scrase@email.com"
+git config --global user.name "Edgar Scrase"
+
+#-------------------------------------------------------------------------------------------------------
+# Creating a new repository
+# Navigate to the project folder you want to track with git.
+# Here's a good guide for using the command prompt to navigate to folders on your PC. And a guide for Macs. One shortcut is to drag the folder from Finder onto the terminal icon in the menu and it will go to that folder in terminal.
+# Once you're in the right folder, type:
+  
+  git init .
+# This tells git to initialize a new repository in the current folder and everything in it, represented by the . in the command.
+
+# Did you configure git with your name and email yet?
+  
+git config --global user.email "your@email.com"
+git config --global user.name "your name"
+
+#-------------------------------------------------------------------------------------------------------
+# Committing your work
+# Now that you've initialized the folder as a repository, you can start logging your work.
+# This is called "commits".
+# Though it's not required, a useful first step before committing your work is to check the status of your git with the command:
+  
+  git status
+
+# You'll probably get a big list of files under "untracked".
+# This means that git recognizes that these files exist but isn't tracking them for changes.
+# You have to use the add command.
+
+git add .
+# This will add everything in the directory to be tracked.
+# You can add specific files by typing it out instead of using the . period to represent all files.
+# To be safe, run the add command before every commit to make sure you're not leaving any files behind.
+# After adding the files, run the status command again.
+
+git status
+
+# Git will tell you that your files have been staged and are ready to commit.
+# Now, you can log this change with the commit command.
+# You have to include a personalized message, which you add by passing the -m command with the string for the message.
+git commit -m "first commit"
+
+# That's it!
+# For future commits, try to communicate what changes were made.
+# This is good for documentation for if you need to revert back to a previous version.
+
+# It can seem like a lot of work and typing at first but it's the best practice for doing this.
+#   add files
+#   commit files with a message
+#   repeat
+# You'll get used to it.
+# Next, we can push these changes online to GitHub for sharing.
+
+
+#-------------------------------------------------------------------------------------------------------
+# Creating a Github respository
+# Go to Github.com and create a new account if you haven't yet. Use the same username and email address that you set up with your git global option.
+# For this example, we're going to upload our folder of chunks that we created in the Publishing chapter.
+# In Github, create a new public repository called "chunks".
+# Do NOT check "Initialize with README". You want a blank repository.
+
+# This will create a new repository page, which needs to be synchronized with the local repository we're about to create.
+# Create a folder somewhere (Remember good workflow. Maybe move it to your Documents folder or a new folder for Projects?) and also call it "chunks".
+# Copy and paste the files, including 01_chunk.html and 01_chunk.rmd files into that "chunks" folder.
+
+# then link this local directory to the one online ..
+###### ARRRRGH do not use SSH - just use the https option below git@github.com:Eeedgar/chunks.git
+git remote add origin https://github.com/Eeedgar/chunks.git
+git push -u origin master
+
+
+#-------------------------------------------------------------------------------------------------------
+# That's it!
+# What if you get some new data and wanted to update this?
+# Change the data imported in the local project
+# Generate a new HTML from the .Rmd file
+# git add the files in the terminal/cmd
+# git commit -m with the message "new data" or whatever
+# git push -u origin master to move the new file changes to Github
+# Refresh the URL address and the changes should be reflected!
+# And that is that!
+# With this published repo, you're now part of the reproducible journalism community.
+# Last thing we'll go over are some tips and best practices.
+
+#-------------------------------------------------------------------------------------------------------
+# BEST PRACTICES FOR GITHUB
+
+# Provide summarized data
+# While it's excellent to include the scripts that detail the cleaning and wrangling process it took to turn raw data into the polished set you've published, there is a large audience of people who just want to download and play with the finalized data.
+# Include a folder in the repo that you can point them to so they don't have to dig through your methodology to reproduce the summarized data.
+
+# .gitignore
+# Use .gitignore to exclude certain files from being uploaded to GitHub. Such as:
+# Files larger than 100 mb
+# GitHub will refuse to upload the data
+# Files with your keys or passwords
+# Extraneous files like your R history
+# You can borrow this .gitignore file for inspiration.
+
+# Include readmes and data dictionaries
+# Let people know what they're dealing with.
+
+# Be as specific as possible, including where you got the data from.
+# Buzzfeed is a good model for how they index their story links and repos as a table
+
+
+#-------------------------------------------------------------------------------------------------------
+# Licensing
+# Be sure to include a license in each repo.
+# This lets others know that it's open source, and sets the limits on how people can use, change, or distribute your work.
+# For example, The Washington Post usually publishes their work in GitHub under an Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license.
+# This means users can share, copy, and redistribute our data in any medium or format and can remix, transform, and build upon our work. 
+# However, they must give appropriate credit and indicate if any changes were made. And they must not use it for commercial purposes and must also share their work under the same license.
+# There's also the MIT license, which is very similar.
+# Have a discussion with your folks and remain consistent.
+
+
+#-------------------------------------------------------------------------------------------------------
+# To learn more about using git and GitHub with R
+# http://happygitwithr.com/
+
+
+#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------
+# How to deal with some issues that may pop up
+# Permission to install packages locally
+# Mac users may need to alter their security preferences to allow apps authored by non-Apple developers to install. If you notice an error, try to change your system preferences.
+
+
+# Common Mistakes
+# Spelling mistakes
+# I swear, 80 percent of my mistakes come from typos
+# Using the wrong case
+# help(), Help(), and HELP() are three different functions (and only the first one will work)
+# Forgetting to use quotation marks when they are needed
+# install.packages("gclus") will work, while install.packages(gclus) will generate an error.
+# Forgetting to include the parentheses in a function call
+# help() rather than help. Even if there are no options, you still need the().
+# Using the \ in a path name on Windows
+# R sees the backlash character as an escape character.
+# setwd("c:\mydata") will generate an error. Use setwd("c:/mydata") or setwd("c:\\mydata") instead
+# Using a function from a package that is not loaded
+# The function str_trim() is contained in the stringr package.
+# If you try to use it before loading the package, you will get an error 
+
+
+# Other possible issues
+# Package conflicts
+# Sometimes, packages depend on other packages to work correctly
+# If it says a package is missing, install it and then install the one that caused the error
+# To specify a specific package for a function, precede the code with nameofpackage::
+#   For example, filter() will turn into dplyr::filter()
+# File cannot be found
+# Check getwd() is the file you're trying to access in that directory that R thinks it should look?
+#   If not, use setwd() to point to the correct directory.
+# Is the file name spelled correctly?
+#   Run ls() to get a list of the files in the working directory and see if that file matches what's listed.
+# Sometimes it's as simple as a capital letter when it shouldn't.
+# R working directory doesn't work ideally with unzipped folders
+# Make sure if you extract a zip, you move the folder to your computer and not just a temporary folder
+# Objects, including column names, need to be one word
+# Space won't be interpreted correctly unless in the context of strings, so it must be surrounded by quotation marks
+# To deal with columns that have spaces, you use the backtick ` next to the 1 button on your keyboard. so referencing column name on a dataframe called temp will be temp$`column name`
+
+
+# Warnings
+# Warning message: package 'whatever' was built under R version 3.x.x
+# Make sure you have the latest version of R and RStudio installed
+# Sometimes unfix-able, sometimes worth fixing
+# As long as it doesn't mess up your data (for example, sometimes the warning that some items were replaces with NA is okay, and sometimes it's horrible) 
+# What's with the weird phrase in the Console when I start R?
+# Every version of release for R references a different Peanuts comic strip or film.
+# You Stupid Darkness
+# Kite Eating Tree
+
+
+# Other ways to find solutions
+# Search for your question on StackOverflow or on Google
+# I've found answers to so many of my questions thanks to others who have encountered the same problem as me
+# If you can't find a solution after Googling it, shoot it out to the #rstats community on Twitter
+# You'll probably get a response that might solve your problem and maybe a GIF reaction for the heck of it
+# If it's a problem related to a package, track down the GitHub repo for it and submit a question to the contributors
+# Sometimes your issue might be something that will help lead to a fix that improves the experience for all other users
+# I've found that R package creators are very responsive on GitHub and even Twitter with questions 
+
+
+
+
+
+
+
+
+
+

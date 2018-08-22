@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1534969247312.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F700CECC",
+    "lastKnownWriteTime" : 1534970150,
+    "last_content_update" : 1534970150306,
+    "path" : "C:/Dropbox/Data Nirvana/R_Project/Protection_Rates_Refugees_Europe/04_Scripts/TransformData.R",
+    "project_path" : "04_Scripts/TransformData.R",
+    "properties" : {
+        "cursorPosition" : "9,104",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

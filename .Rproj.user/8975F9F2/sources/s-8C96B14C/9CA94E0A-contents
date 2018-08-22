@@ -1,0 +1,260 @@
+#-------------------------------------------------------------------------------------------------------
+# Chapter 6 - RMarkdown
+
+install.packages("usethis")
+
+usethis::use_course("https://github.com/r-journalism/learn-chapter-6/archive/master.zip")
+
+
+#-------------------------------------------------------------------------------------------------------
+# Check out plotly for the interactive graphics
+
+# walk2 - means you can avoide doing loops
+
+
+
+#-------------------------------------------------------------------------------------------------------
+# R Markdown is R code + Markdown.
+# What is Markdown?
+# A very easy way to add formatting to plain text created by John Gruber (of Daring Fireball) as a 
+# simple way for non-programming types to write in an easy-to-read format that could be converted directly into HTML.
+# e.g. # is H1, ## is H2 etc....
+# It's a version of literate programming (see https://www-cs-faculty.stanford.edu/~knuth/lp.html). 
+# By combining your R code with documentation, it makes your programming more robust, portable, and easier to maintain.
+
+# Produce slick-looking PDFs - Exporting your work into PDFs can be effective. For this to work, be sure to get LaTex installed first.
+
+
+setwd("C:/Dropbox/Data Nirvana/R_Project/learn-chapter-6-master")
+
+
+# Each .Rmd file has its own custom YAML section at the top. These are keywords that when combined with the right packages, lets knitr know how to output the .Rmd file. Like toc: toc_float creates an HTML file with a self-generated Table of Contents based on the header titles.
+# GitHub doesn't have a way to interpret that so it creates that nested image above and doesn't even try to make a table of contents.
+# That's fine, though
+# Output .Rmd files to HTML
+# R Markdown will let you output as HTML, which you can still host on GitHub Pages (which we'll go over later). You may have to include links to the actual page but doing so can be more effective than having a .Rmd file "render" in a GitHub repo.
+# Rendering in HTML lets you add CSS and JavaScript, allowing for the inclusion of content like the interactive table below.
+
+library(DT)
+library(dplyr)
+library(readr)
+payroll <- read_csv("data/bostonpayroll2013.csv") %>% 
+  select(NAME, TITLE, DEPARTMENT, REGULAR, OVERTIME) %>% 
+  filter(row_number()<100)
+datatable(payroll, extensions = 'Buttons', options = list(
+  dom = 'Bfrtip',
+  buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+)
+)
+
+# This table was rendered with the DT package - And we don't have to create the code to display it.
+# It just worked because the folks who ported the DataTables jquery plugin over to R wanted to make it seamless.
+# Pass certain arguments to the function datatable() and you can include buttons that allow reporters to download your tables as CSVs.
+# Can you imagine the power of that?
+# You've transformed the data collected it and then instead of sending them a huge spreadsheet, you send them a link to your report in which they can filter things out and download the table that they've come up with themselves.
+# You can render other interactives, as well, like leaflet maps.
+
+#-------------------------------------------------------------------------------------------------------
+# Host the HTML of your analysis
+# On your internal work network or
+# On Github pages (for free)
+# Share with reporters and editors, let them explore your analysis further
+# Let them download customized spreadsheets with buttons in the DT (datatable) package
+# If your analysis gets updated, keep the file name then they only have to refresh their link
+# Repeat this process enough and maybe you can start learning how to create Shiny apps with R.
+
+
+#-------------------------------------------------------------------------------------------------------
+# Rmd files ...
+# Every .Rmd file starts out the same at the top.
+# YAML HEADER
+# Optional section of render options written as key:value pairs.
+
+# At start of file
+# Between lines of - (3 dashes)
+# This is how R knows how to render your files. In the example above, the lineoutput: html_document means it will create an HTML file. If it was output: pdf then you'd get a PDF instead.
+# You can output more than one type at a time, if you want.
+
+# CODE CHUNKS
+# In the image above, the R code is in the gray area.
+# These are chunks of embedded R code. Each chunk:
+# begins with ```{r} (the back tick key is to the left of 1)
+# ends with ```
+
+# TEXT
+# The rest of it is just the narrative of markdown interspersed in between the R code chunks.
+# You can also use HTML code instead of Markdown if that's what you're more comfortable with.
+
+# 2b. Label your chunks of code
+# It'll be easier to navigate to in the future with the pull down menu at the bottom of the script window.
+# It also will be useful to narrow down where code errors might occur.
+
+# 3b. Check out the build log
+# 4. Preview output in RStudio window
+
+#-------------------------------------------------------------------------------------------------------
+# Hide warnings, messages
+# We can hide those console messages adding warning=F and message=F by the R code chunk labels.
+# Create a new R Markdown file and call it Chunk 2.
+# Type the code in below.
+
+#-------------------------------------------------------------------------------------------------------
+# Hide code
+# If the person you're sharing this with has no interest in the code and only the quick results, use echo=F to hide the chunk of code and just display the output. It's on line 8.
+# We'll also narrow down the variables selected so the table isn't way too wide.
+
+#-------------------------------------------------------------------------------------------------------
+# Inline R code
+# Embed lines of R code within the markdown narrative with
+# This is really useful as it is self-generating analysis 
+# This is important because if you get the next year of payroll data, running this report will sub in the 
+# new city employee who makes the most money automatically.
+
+#-------------------------------------------------------------------------------------------------------
+# Pretty tables
+# Make pretty tables with the knitr package and the kable() function.
+
+#-------------------------------------------------------------------------------------------------------
+# Change theme and style
+# Change the appearance and style of the HTML document by changing the theme up top.
+# Options from the Bootswatch theme library includes:
+#   default
+#   cerulean
+#   journal
+#   cosmo
+
+# highlights (for the code syntax)
+#   tango
+#   pygments
+#   kate
+
+
+#-------------------------------------------------------------------------------------------------------
+# Table of contents
+# Add a floating table of contents by changing html_document to toc: true and toc_float: true.
+
+
+#-------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------
+# WORKFLOW
+# Why a clear data analysis workflow?
+  
+# Check analysis and track errors
+# Share results with colleagues for stories or editing
+# Send methodology to sources for bullet-proofing
+# To easily adjust when presented with new data
+# Easily switch between work environments (desktop and laptop)
+# Scavenge and repurpose code in future projects
+
+#-------------------------------------------------------------------------------------------------------
+# Constraints
+# Workflow has to be platform agnostic
+# Easy to deploy for yourself and others
+# Free open source software
+# Input has to be real raw data in whatever format it is (and wherever it is)
+# But have a backup for when internet is not accessible
+# Output has to work - whether html, PDF, or web app
+# IDE agnostic (be able to run it from a command line without RStudio)
+
+#-------------------------------------------------------------------------------------------------------
+# Four components
+# Software
+# R
+# RStudio
+# Git for version control
+# Clear file organization
+# One R script to pull it all together
+# Hosting the html output internally or publicly with GitHub pages
+
+#-------------------------------------------------------------------------------------------------------
+# Thanks
+# These are all things I picked up from browsing other presentations and repos.
+# Much thanks to Jenny Bryan and Joris Muller from whom I cobbled many of these ideas and practices from.
+# Also to BuzzFeed, FiveThirtyEight, ProPublica, Chicago Tribune, Los Angeles Times, and TrendCT.org
+
+#-------------------------------------------------------------------------------------------------------
+# Comment your code
+# Anything that appears on a line after # will be treated as a comment. That means it will be ignored when the code in the script is executed.
+# Use this to explain what the code does.
+# Get into this habit early. Future readers of the code will be grateful for the clear documentation you leave behind- including yourself months from now.
+# Use projects to organize
+
+#-------------------------------------------------------------------------------------------------------
+# Use portable file paths
+# DO NOT USE setwd()
+# Keep everything relative to your project directory and it will work on everyone who downloads your project repo folder.
+# For example: 
+# name_of_project
+# |--raw_data
+# |----WhateverData.xlsx
+# |----2017report.csv
+# |----2016report.pdf
+# |--output_data
+# |----summary2016_2017.csv
+# |----rmd
+# |----01-analysis.Rmd
+# |--docs
+# |----01-analysis.html
+# |----01-analysis.pdf
+# |----02-deeper.html
+# |----02-deeper.pdf
+# |--scripts
+# |----exploratory_analysis.R
+# |----pdf_scraper.R
+# |----name_of_project.Rproj
+# |--run_all.R
+
+#-------------------------------------------------------------------------------------------------------
+# Creating folder shortcut
+folder_names <- c("raw_data", "output_data", "rmd", "docs", "scripts")
+sapply(folder_names, dir.create)
+
+#-------------------------------------------------------------------------------------------------------
+# Organization principles
+# Directory names are obvious to anyone looking
+# Reports and the script files are not in the same directory
+# Reports are sorted using 2-digit numbers. Tell your story clearly.
+
+#-------------------------------------------------------------------------------------------------------
+# Source to the online data
+# Normal data file
+if (!file.exists("data/bostonpayroll2013.csv")) {
+  
+  dir.create("data", showWarnings = F)
+  download.file(
+    "https://website.com/data/bostonpayroll2013.csv",
+    "data/bostonpayroll2013.csv")
+}
+
+payroll <- read_csv("data/bostonpayroll2013.csv")
+
+# Dealing with a zip file
+if (!file.exists("data/employment/2016-12/FACTDATA_DEC2016.TXT")) {
+  
+  dir.create("data", showWarnings = F)
+  temp <- tempfile()
+  download.file(
+    "https://website.com/data/bostonpayroll2013.zip",
+    temp)
+  unzip(temp, exdir="data", overwrite=T)
+  unlink(temp)
+}
+
+payroll <- read_csv("data/bostonpayroll2013.csv")
+
+#-------------------------------------------------------------------------------------------------------
+# Operate without a net
+# Never save work space to .RData on exiting RStudio and uncheck Restore .RData on start up.
+# This will make sure you've optimized your data ingesting and cleaning process and aren't working with a misstep in your process.
+
+
+
+
+
+
+
+
+
+
+
+

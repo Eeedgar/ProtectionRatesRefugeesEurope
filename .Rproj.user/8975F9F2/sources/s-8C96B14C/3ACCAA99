@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1534965939663.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3ACCAA99",
+    "lastKnownWriteTime" : 1534969039,
+    "last_content_update" : 1534969039970,
+    "path" : "C:/Dropbox/Data Nirvana/R_Project/Protection_Rates_Refugees_Europe/04_Scripts/LoadData.R",
+    "project_path" : "04_Scripts/LoadData.R",
+    "properties" : {
+        "cursorPosition" : "457,0",
+        "scrollLine" : "419"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

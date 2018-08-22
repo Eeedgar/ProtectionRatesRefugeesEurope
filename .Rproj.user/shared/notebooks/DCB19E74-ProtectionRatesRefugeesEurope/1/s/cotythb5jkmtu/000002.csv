@@ -1,0 +1,8 @@
+"0","# Lets write the three summary files to disk
+# This is a good point to save this data cube - so we can get back to it if needed ...
+write.csv2(dcvtTotal, str_c(""02_OutputData/Summary_Totals.csv""))
+"
+"2","cannot open file '02_OutputData/Summary_Totals.csv': No such file or directory"
+"2","Error in file(file, ifelse(append, ""a"", ""w"")) : 
+  cannot open the connection
+"
