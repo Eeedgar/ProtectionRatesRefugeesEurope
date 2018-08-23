@@ -2,7 +2,10 @@
 title: "Protection rates of refugees in Europe"
 author: "Edgar Scrase"
 date: "22 August 2018"
-output: html_document
+output: 
+  html_document:
+    includes: 
+      in_header: FavIcon.html
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This dashboard shows the **protection rate of refugees in Europe** and highlights the variance in the number of decisions on asylum applications by country in Europe and the large variance in the protection rates by country of origin.  The dashboard also highlights the suprising differences in the protection rates by country of asylum in Europe, particularly for Iraqis and Afghans.  It's surprising as even though each country has its own asylum laws and processes, there have been huge efforts to standardise this within the European Union.  As the data shows, more still needs to be done on this!
 
-Here is the output and the next sections go through how it was produced step-by-step.
+Here is the output and the next sections go through how it was produced step-by-step.  All the [source code and data](https://github.com/Eeedgar/ProtectionRatesRefugeesEurope) are available on GitHub.
 
 ![](../02_OutputVisualisation/Vis.png)
 
@@ -29,7 +32,7 @@ There are three different statuses for refugees in Europe, ranging from Geneva c
 
 Four data sources were used to compile this dashboard:
 
-1. **Statistical data** - is from [Eurostat](http://ec.europa.eu/eurostat/web/asylum-and-managed-migration/data/database?p_p_id=NavTreeportletprod_WAR_NavTreeportletprod_INSTANCE_sFp6GUtIbBHg&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-2&p_p_col_count=1) and is available via an API from EuroStat.  If you can't wait to download the data, use this already downloaded [raw data](../01_RowData/EuroStatsData_2016Q4.csv).  The asylum decision data is available on a quarterly basis.  
+1. **Statistical data** - is from [Eurostat](http://ec.europa.eu/eurostat/web/asylum-and-managed-migration/data/database?p_p_id=NavTreeportletprod_WAR_NavTreeportletprod_INSTANCE_sFp6GUtIbBHg&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-2&p_p_col_count=1) and is available via an API from EuroStat.  If you can't wait to download the data, use this already downloaded [raw data](https://github.com/Eeedgar/ProtectionRatesRefugeesEurope/tree/master/01_RawData).  The asylum decision data is available on a quarterly basis.  
 2. **Country spatial data** - in this case the *centroid* (which is the geographical centre) was scraped from a [Google documentation page](https://developers.google.com/public-data/docs/canonical/countries_csv).
 3. **Basemap** - the [tiles](https://api.mapbox.com/styles/v1/edgarscrase/cjl1c78tn37v72sofn80jo9en.html?fresh=true&title=true&access_token=pk.eyJ1IjoiZWRnYXJzY3Jhc2UiLCJhIjoiY2pram90c3M3MWRxdjNxcWhzOXRzY3N6ZCJ9._HQxSBcViAYVr9Bg1OWI_A#3.4/57.750060/17.037912/0) were produced using OpenStreetMap data and were styled in MapBox Studio and then published.  MapBox Studio gives you a lot of flexibility to easily creating your ideal base map.
 4. **Most common countries of origin** - based on this factsheet <https://data2.unhcr.org/en/documents/details/64846>
@@ -415,7 +418,7 @@ euPlusCountries <- tibble::tribble(
 
 
 The EuroStat API can be accessed using JSON and the URL is structured like this 
-<https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asydcfstq?freq=Q&unit=PER&citizen=VE&sex=T&age=TOTAL&decision=TOTAL&time=2016Q4>.  The service has fairly tight limits on the volume of data you can download in each request, so we will need to iterate through the Citizen (country of origin) and Decision (Protection status) options and then compile our dataset by joining the data downloaded from each request.
+<https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/migr_asydcfstq?freq=Q&unit=PER&citizen=VE&sex=T&age=TOTAL&decision=TOTAL&time=2016Q4>.  The service has fairly tight limits on the volume of data you can download in each request, so we will need to iterate through the Citizen (country of origin) and Decision (Protection status) options and then compile our dataset by joining the data downloaded from each request.  Here is more information on the structure of the [EuroStat JSON API requests and the data returned](http://ec.europa.eu/eurostat/web/json-and-unicode-web-services/getting-started/rest-request).
 
 ``` {r loading2, warning=F, message=F, echo=T}
 #-------------------------------------------------------------------------------------------------------
